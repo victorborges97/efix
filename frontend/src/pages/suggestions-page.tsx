@@ -1,5 +1,5 @@
-import { SuggestionDialog } from "@/components/suggestions/suggestion-dialog";
-import { SuggestionList } from "@/components/suggestions/suggestion-list";
+import { SuggestionDialog } from "@/components/shared/suggestions/suggestion-dialog";
+import { SuggestionList } from "@/components/shared/suggestions/suggestion-list";
 import { useState } from "react";
 
 export default function SuggestionsPage() {

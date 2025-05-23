@@ -4,8 +4,8 @@ import { format, subDays } from "date-fns";
 import {
   DateRangePicker,
   type DateRangeCustom,
-} from "@/components/costumization/date-range-picker";
-import { api } from "@/services/api";
+} from "@/components/shared/date-range-picker";
+import { api } from "@/lib/api";
 
 export default function DashboardPage() {
   const [dateRange, setDateRange] = useState<DateRangeCustom>({
