@@ -1,0 +1,21 @@
+meta {
+  name: Create
+  type: http
+  seq: 1
+}
+
+post {
+  url: http://localhost:3000/evaluations
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "errorCode": "MS0001",
+    "date": "2025-05-25T04:15:45.000Z",
+    "clientCode": "jvtest",
+    "evaluation": true,
+    "comment": "Teste de comentário 3"
+  }
+}

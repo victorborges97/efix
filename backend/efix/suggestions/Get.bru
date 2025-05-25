@@ -1,0 +1,22 @@
+meta {
+  name: Get
+  type: http
+  seq: 2
+}
+
+get {
+  url: http://localhost:3000/suggestions?errorCode=MS0001
+  body: none
+  auth: inherit
+}
+
+params:query {
+  errorCode: MS0001
+}
+
+body:json {
+  {
+    "errorCode": "MS0001",
+    "text": "Error 1 do eSocial"
+  }
+}

@@ -4,11 +4,11 @@ API REST criada com NestJS e PostgreSQL para gerenciamento de sugestões de solu
 
 ## 🚀 Tecnologias utilizadas
 
-* [NestJS](https://nestjs.com/)
-* [TypeScript](https://www.typescriptlang.org/)
-* [PostgreSQL](https://www.postgresql.org/)
-* [Prisma ORM](https://www.prisma.io/)
-* [Docker](https://www.docker.com/)
+- [NestJS](https://nestjs.com/)
+- [TypeScript](https://www.typescriptlang.org/)
+- [PostgreSQL](https://www.postgresql.org/)
+- [Prisma ORM](https://www.prisma.io/)
+- [Docker](https://www.docker.com/)
 
 ## 📖 Estrutura do projeto
 
@@ -35,7 +35,7 @@ src/
 
 ### Requisitos:
 
-* Docker e Docker Compose instalados
+- Docker e Docker Compose instalados
 
 ### Passos:
 
@@ -49,6 +49,9 @@ docker-compose up -d
 
 # Instalar dependências
 npm install
+
+# Gerar schemas
+npx prisma generate
 
 # Rodar a aplicação
 npm run start:dev
