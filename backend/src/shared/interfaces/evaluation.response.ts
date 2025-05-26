@@ -9,8 +9,6 @@ export class EvaluationResponse {
     evaluation: boolean;
     @ApiProperty()
     suggestionId: string;
-    @ApiProperty({ type: Date })
-    date: Date;
     @ApiProperty()
     clientCode: string;
     @ApiProperty({ type: 'string', required: false, nullable: true })

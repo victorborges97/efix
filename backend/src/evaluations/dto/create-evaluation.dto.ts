@@ -7,10 +7,6 @@ export class CreateEvaluationDto {
     @Length(6, 6)
     errorCode: string;
 
-    @ApiProperty()
-    @IsDateString()
-    date: string;
-
     @ApiProperty({ minLength: 6, maxLength: 6 })
     @IsString()
     @Length(6, 6)

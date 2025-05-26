@@ -12,11 +12,9 @@ export class SuggestionsService {
   constructor(private prisma: PrismaService) { }
 
   async create(data: CreateSuggestionDto): Promise<SuggestionResponse> {
-    const errorCode = await this.prisma.suggestion.findFirst({
+    const errorCode = await this.prisma.suggestion.findUnique({
       where: {
-        errorCode: {
-          equals: data.errorCode
-        },
+        errorCode: data.errorCode,
       }
     })
     if (errorCode !== null) throw new BadRequestException("Suggestion already registered.");

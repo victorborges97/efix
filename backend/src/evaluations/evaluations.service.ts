@@ -12,11 +12,9 @@ export class EvaluationsService {
   constructor(private prisma: PrismaService) { }
 
   async create(data: CreateEvaluationDto): Promise<EvaluationResponse> {
-    const errorCode = await this.prisma.suggestion.findFirst({
+    const errorCode = await this.prisma.suggestion.findUnique({
       where: {
-        errorCode: {
-          equals: data.errorCode
-        },
+        errorCode: data.errorCode,
       }
     })
 
@@ -25,7 +23,6 @@ export class EvaluationsService {
     return this.prisma.evaluation.create({
       data: {
         clientCode: data.clientCode,
-        date: new Date(data.date),
         evaluation: data.evaluation,
         comment: data.comment,
         errorCode: data.errorCode,
