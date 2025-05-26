@@ -11,12 +11,16 @@ async function bootstrap() {
 
   const config = new DocumentBuilder()
     .setTitle('eFix')
-    .setDescription('The cats API description')
+    .setDescription('Sistema de gerenciamento de soluções de erros - Desafio')
     .setVersion('1.0')
     // .addBearerAuth()
     .build();
   const documentFactory = () => SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api', app, documentFactory);
+  SwaggerModule.setup('api', app, documentFactory, {
+    swaggerOptions: {
+      docExpansion: 'none',  // <-- aqui, para deixar tudo fechado
+    },
+  });
 
   await app.listen(process.env.PORT ?? 3000);
 }
