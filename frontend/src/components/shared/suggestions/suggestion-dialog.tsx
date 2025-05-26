@@ -13,7 +13,7 @@ import { api } from "@/lib/api";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useRef, useState } from "react";
+import { useRef } from "react";
 
 const schema = z.object({
   errorCode: z
@@ -56,7 +56,9 @@ export function SuggestionDialog({ onSuccess }: { onSuccess: () => void }) {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button>Novo</Button>
+        <Button className="flex-1 md:flex-[0] bg-emerald-600 hover:bg-emerald-700 cursor-pointer">
+          Nova
+        </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>

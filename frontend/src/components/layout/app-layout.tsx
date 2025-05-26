@@ -5,7 +5,7 @@ export default function AppLayout() {
   return (
     <div className="min-h-screen bg-muted">
       <Navbar />
-      <main className="mx-auto max-w-7xl px-6 py-6">
+      <main className="mx-auto max-w-7xl px-6 py-4">
         <Outlet />
       </main>
     </div>

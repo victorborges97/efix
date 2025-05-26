@@ -1,36 +1,71 @@
-import { cn } from "@/lib/utils";
 import { Link, useLocation } from "react-router-dom";
+import { Menu, LayoutDashboard, Lightbulb } from "lucide-react";
+import { Button } from "../ui/button";
+import {
+  SheetContent,
+  SheetTrigger,
+  Sheet,
+  SheetHeader,
+  SheetTitle,
+  SheetDescription,
+} from "../ui/sheet";
 
 export function Navbar() {
   const location = useLocation();
 
-  const navItems = [
-    { path: "/", label: "Dashboard" },
-    { path: "/suggestions", label: "Sugestões" },
+  const links = [
+    { name: "Dashboard", href: "/", icon: LayoutDashboard },
+    { name: "Sugestões", href: "/suggestions", icon: Lightbulb },
   ];
+  const isActive = (href: string) => location.pathname === href;
 
   return (
-    <header className="w-full border-b bg-white px-6 py-4 shadow-sm">
-      <div className="mx-auto flex max-w-7xl items-center justify-between">
-        <Link to="/" className="text-lg font-bold text-primary">
-          eFix
-        </Link>
-        <nav className="flex gap-4 text-sm font-medium">
-          {navItems.map((item) => (
-            <Link
-              key={item.path}
-              to={item.path}
-              className={cn(
-                "py-2 px-3 rounded-md hover:bg-gray-200",
-                location.pathname === item.path && "bg-gray-200 font-semibold"
-              )}
+    <nav className="border-b px-6 py-3 flex items-center justify-between bg-white">
+      <Link to="/" className="text-2xl font-bold text-black">
+        eFix
+      </Link>
+      <div className="hidden md:flex space-x-4">
+        {links.map(({ name, href, icon: Icon }) => (
+          <Link key={href} to={href}>
+            <Button
+              className="cursor-pointer"
+              variant={isActive(href) ? "secondary" : "ghost"}
             >
-              {item.label}
-            </Link>
-          ))}
-        </nav>
-        <div></div>
+              <Icon className="mr-2 h-4 w-4" />
+              {name}
+            </Button>
+          </Link>
+        ))}
       </div>
-    </header>
+
+      <div className="md:hidden">
+        <Sheet>
+          <SheetTrigger asChild>
+            <Button variant="outline" size="icon">
+              <Menu className="h-5 w-5" />
+            </Button>
+          </SheetTrigger>
+          <SheetContent side="right" className="w-[250px] p-4">
+            <SheetTitle>Menu</SheetTitle>
+            <SheetHeader className="hidden">
+              <SheetDescription>description goes here</SheetDescription>
+            </SheetHeader>
+            <div className="flex flex-col space-y-2">
+              {links.map(({ name, href, icon: Icon }) => (
+                <Link key={href} to={href}>
+                  <Button
+                    variant={isActive(href) ? "secondary" : "ghost"}
+                    className="w-full justify-start cursor-pointer"
+                  >
+                    <Icon className="mr-2 h-4 w-4" />
+                    {name}
+                  </Button>
+                </Link>
+              ))}
+            </div>
+          </SheetContent>
+        </Sheet>
+      </div>
+    </nav>
   );
 }
