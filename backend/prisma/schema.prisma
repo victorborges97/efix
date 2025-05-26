@@ -8,18 +8,24 @@ datasource db {
 }
 
 model Suggestion {
-    id          Int          @id @default(autoincrement())
+    id          String       @id @default(uuid())
     errorCode   String       @unique() @db.Char(6)
     text        String
     evaluations Evaluation[]
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @default(now()) @updatedAt()
 }
 
 model Evaluation {
-    id         Int        @id @default(autoincrement())
-    errorCode  String     @db.Char(6)
-    date       DateTime
-    clientCode String     @db.Char(6)
+    id           String @id @default(uuid())
+    suggestionId String
+
+    errorCode  String  @db.Char(6)
+    clientCode String  @db.Char(6)
     evaluation Boolean
     comment    String?
-    suggestion Suggestion @relation(fields: [id], references: [id])
+
+    createdAt  DateTime   @default(now())
+    suggestion Suggestion @relation(fields: [suggestionId], references: [id])
 }
