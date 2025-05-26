@@ -1,14 +1,27 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateEvaluationDto } from './dto/create-evaluation.dto';
-import { Prisma } from '@prisma/client';
 import { FilterEvaluationsDto } from './dto/filter-evaluations.dto';
+import { QueryPaginationDto, usePagination } from 'src/shared/dto/query-pagination.dto';
+import { Paginated, useMetaPaginated } from 'src/shared/types/paginated.type';
+import { EvaluationResponse } from 'src/shared/interfaces/evaluation.response';
+import { useEvaluationFilter } from 'src/shared/hooks/use-filters';
 
 @Injectable()
 export class EvaluationsService {
   constructor(private prisma: PrismaService) { }
 
-  async create(data: CreateEvaluationDto) {
+  async create(data: CreateEvaluationDto): Promise<EvaluationResponse> {
+    const errorCode = await this.prisma.suggestion.findFirst({
+      where: {
+        errorCode: {
+          equals: data.errorCode
+        },
+      }
+    })
+
+    if (!errorCode) throw new NotFoundException("Suggestion not found!")
+
     return this.prisma.evaluation.create({
       data: {
         clientCode: data.clientCode,
@@ -16,36 +29,31 @@ export class EvaluationsService {
         evaluation: data.evaluation,
         comment: data.comment,
         errorCode: data.errorCode,
-        suggestion: { connect: { errorCode: data.errorCode } },
+        suggestionId: errorCode.id,
       }
     });
   }
 
-  // Avaliação média total (positivas/total)
-  async getAverageEvaluation() {
-    const total = await this.prisma.evaluation.count();
-    const positives = await this.prisma.evaluation.count({ where: { evaluation: true } });
-    return positives / total;
-  }
+  async getAll(params: FilterEvaluationsDto, pagination?: QueryPaginationDto) {
+    const where = useEvaluationFilter(params);
+    const { skip, take } = usePagination(pagination);
 
-  // Avaliação média por sugestão (agrupado por errorCode)
-  async getAverageBySuggestion() {
-    return this.prisma.evaluation.groupBy({
-      by: ['errorCode'],
-      _avg: { id: true },
+    const data: EvaluationResponse[] = await this.prisma.evaluation.findMany({
+      skip,
+      where,
+      take,
     });
-  }
 
-  // Avaliações filtradas por data e outros
-  async getEvaluationsFiltered(params: FilterEvaluationsDto) {
-    const where: Prisma.EvaluationWhereInput = {};
-    if (params.from || params.to) {
-      where.date = {};
-      if (params.from) where.date.gte = params.from;
-      if (params.to) where.date.lte = params.to;
-    }
-    if (params.errorCode) where.errorCode = params.errorCode;
+    const totalCount = await this.prisma.evaluation.count({
+      where
+    });
 
-    return this.prisma.evaluation.findMany({ where });
+    const meta = useMetaPaginated(totalCount, pagination);
+
+    return {
+      data,
+      meta,
+    } as Paginated<EvaluationResponse>;
   }
 }
+
