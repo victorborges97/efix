@@ -50,7 +50,10 @@ docker-compose up -d
 # Instalar dependências
 npm install
 
-# Gerar schemas
+# Rodar as migrations para criar a estrutura do banco
+npx prisma migrate deploy
+
+# Gerar client Prisma
 npx prisma generate
 
 # Rodar a aplicação
