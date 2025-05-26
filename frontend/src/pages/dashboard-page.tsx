@@ -1,92 +1,109 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { useEffect, useState } from "react";
-import { format, subDays } from "date-fns";
-import {
-  DateRangePicker,
-  type DateRangeCustom,
-} from "@/components/shared/date-range-picker";
-import { api } from "@/lib/api";
+import { useState } from "react";
+import { endOfDay, format, parseISO, startOfDay, subDays } from "date-fns";
+import type { DateRange } from "react-day-picker";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { EvaluationDetails } from "@/components/shared/evaluations/evaluation-detail";
+import { EvaluationDialog } from "@/components/shared/evaluations/evaluation-dialog";
+import { EvaluationPerSuggestion } from "@/components/shared/evaluations/evaluation-per-suggestion";
+import { EvaluationAverage } from "@/components/shared/evaluations/evaluation-average";
+import { TitlePage } from "@/components/shared/title-page";
 
 export default function DashboardPage() {
-  const [dateRange, setDateRange] = useState<DateRangeCustom>({
-    from: subDays(new Date(), 30),
+  const [refresh, setRefresh] = useState(false);
+
+  const [dateRange, setDateRange] = useState<DateRange>({
+    from: subDays(new Date(), 15),
     to: new Date(),
   });
 
-  const [data, setData] = useState<
-    {
-      evaluation: boolean;
-      id: number;
-      errorCode: string;
-      date: Date;
-      clientCode: string;
-      comment: string | null;
-    }[]
-  >([]);
-
-  const [loading, setLoading] = useState(false);
-
-  useEffect(() => {
-    async function loadData() {
-      setLoading(true);
-      try {
-        const from = dateRange.from!.toISOString();
-        const to = dateRange.to!.toISOString();
-        const res = await fetchEvaluationSummary(from, to);
-        setData(res);
-      } catch (err) {
-        console.error("Erro ao buscar dados da API", err);
-      } finally {
-        setLoading(false);
-      }
-    }
-
-    loadData();
-  }, [dateRange]);
-
-  async function fetchEvaluationSummary(from: string, to: string) {
-    const res = await api.get("/evaluations", {
-      params: { from, to },
-    });
-    return res.data;
-  }
-
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <h2 className="text-3xl font-bold tracking-tight">Dashboard</h2>
-        <DateRangePicker dateRange={dateRange} setDateRange={setDateRange} />
+      <div className="flex md:justify-between md:flex-row flex-col md:items-center">
+        <TitlePage>Dashboard de Avaliações</TitlePage>
+
+        <div className="flex flex-col md:flex-row mt-4 md:mt-0 md:justify-end md:items-end gap-4">
+          <div className="flex gap-2 md:min-w-[289px] flex-wrap">
+            <div className="flex-1 md:max-w-40">
+              <label className="block text-sm font-medium mb-1">
+                Data Inicial
+              </label>
+              <Input
+                className="bg-gray-50"
+                type="date"
+                value={format(dateRange.from!, "yyyy-MM-dd")}
+                max={
+                  dateRange.to ? format(dateRange.to, "yyyy-MM-dd") : undefined
+                }
+                onChange={(e) => {
+                  setDateRange((old) => ({
+                    to: old.to,
+                    from: parseISO(e.target.value),
+                  }));
+                }}
+              />
+            </div>
+
+            <div className="flex-1 md:max-w-40">
+              <label className="block text-sm font-medium mb-1">
+                Data Final
+              </label>
+              <Input
+                type="date"
+                className="bg-gray-50"
+                value={format(dateRange.to!, "yyyy-MM-dd")}
+                min={
+                  dateRange.from
+                    ? format(dateRange.from, "yyyy-MM-dd")
+                    : undefined
+                }
+                onChange={(e) =>
+                  setDateRange((old) => ({
+                    from: old.from,
+                    to: parseISO(e.target.value),
+                  }))
+                }
+              />
+            </div>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <Button
+              onClick={() => {
+                setRefresh(!refresh);
+              }}
+              className="flex-1 md:flex-[0] bg-blue-600 hover:bg-blue-700 cursor-pointer"
+            >
+              Filtrar
+            </Button>
+            <EvaluationDialog onSuccess={() => setRefresh(!refresh)} />
+          </div>
+        </div>
       </div>
 
-      {loading && <p className="text-muted-foreground">Carregando...</p>}
+      <EvaluationAverage
+        key={String(refresh) + "evaluation_average"}
+        filter={{
+          startDate: startOfDay(dateRange.from!).toISOString(),
+          endDate: endOfDay(dateRange.to!).toISOString(),
+        }}
+      />
 
-      {data && (
-        <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3">
-          <Card>
-            <CardHeader>
-              <CardTitle>Média geral</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="text-3xl font-bold">{0} ⭐</div>
-              <p className="text-sm text-muted-foreground">
-                Todas as sugestões avaliadas
-              </p>
-            </CardContent>
-          </Card>
+      <EvaluationPerSuggestion
+        key={String(refresh) + "evaluation_per_suggestion"}
+        filter={{
+          startDate: startOfDay(dateRange.from!).toISOString(),
+          endDate: endOfDay(dateRange.to!).toISOString(),
+        }}
+      />
 
-          {data.map((sug) => (
-            <Card key={sug.id}>
-              <CardHeader>
-                <CardTitle>{sug.errorCode}</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="text-lg font-semibold">{sug.comment}</div>
-                <div className="mt-2 text-2xl font-bold">{0} ⭐</div>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-      )}
+      <EvaluationDetails
+        key={String(refresh) + "evaluation_details"}
+        filter={{
+          startDate: startOfDay(dateRange.from!).toISOString(),
+          endDate: endOfDay(dateRange.to!).toISOString(),
+        }}
+      />
     </div>
   );
 }
