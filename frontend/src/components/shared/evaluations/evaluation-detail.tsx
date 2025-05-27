@@ -23,7 +23,7 @@ interface Props extends EvaluationProps {}
 
 export function EvaluationDetails({ filter }: Props) {
   const [page, setPage] = useState(1);
-  const perPage = 3;
+  const perPage = 10;
 
   const [evaluations, setEvaluations] = useState<Evaluation[]>([]);
   const [meta, setMeta] = useState(defaultMeta);
