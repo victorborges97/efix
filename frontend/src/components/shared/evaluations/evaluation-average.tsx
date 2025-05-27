@@ -2,7 +2,9 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { api } from "@/lib/api";
 import type { EvaluationProps } from "@/shared/dto/evaluation-props.dto";
+import { Utils } from "@/shared/utils";
 import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 
 interface Props extends EvaluationProps {}
 
@@ -21,8 +23,12 @@ export function EvaluationAverage({ filter }: Props) {
         params,
       });
       setSummary(res.data);
-    } catch (error) {
-      console.error(error);
+    } catch (error: any) {
+      let errorApi = Utils.getErrorApi(
+        error,
+        "Ocorreu um erro ao buscar a Avaliação Média Geral."
+      );
+      toast.error(errorApi);
     } finally {
       setLoading(false);
     }

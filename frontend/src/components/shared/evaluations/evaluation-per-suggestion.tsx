@@ -14,6 +14,8 @@ import { api } from "@/lib/api";
 import type { Paginated } from "@/shared/dto/paginated.dto";
 import { Button } from "@/components/ui/button";
 import type { EvaluationPerSuggestion } from "@/shared/interfaces/evaluation-per-suggestion";
+import { Utils } from "@/shared/utils";
+import toast from "react-hot-toast";
 
 export function EvaluationPerSuggestion({
   filter,
@@ -48,8 +50,13 @@ export function EvaluationPerSuggestion({
       );
       setSuggestions(res.data.data);
       setMeta(res.data.meta);
-    } catch (error) {
-      console.error(error);
+    } catch (error: any) {
+      let errorApi = Utils.getErrorApi(
+        error,
+        "Ocorreu um erro ao buscar a Avaliação por Sugestão."
+      );
+      if (errorApi.toString().includes("Erro de conexão")) return;
+      toast.error(errorApi);
     } finally {
       setLoading(false);
     }

@@ -8,6 +8,7 @@ import { EvaluationDialog } from "@/components/shared/evaluations/evaluation-dia
 import { EvaluationPerSuggestion } from "@/components/shared/evaluations/evaluation-per-suggestion";
 import { EvaluationAverage } from "@/components/shared/evaluations/evaluation-average";
 import { TitlePage } from "@/components/shared/title-page";
+import { Label } from "@/components/ui/label";
 
 export default function DashboardPage() {
   const [refresh, setRefresh] = useState(false);
@@ -25,9 +26,7 @@ export default function DashboardPage() {
         <div className="flex flex-col md:flex-row mt-4 md:mt-0 md:justify-end md:items-end gap-4">
           <div className="flex gap-2 md:min-w-[289px] flex-wrap">
             <div className="flex-1 md:max-w-40">
-              <label className="block text-sm font-medium mb-1">
-                Data Inicial
-              </label>
+              <Label>Data Inicial</Label>
               <Input
                 className="bg-gray-50"
                 type="date"
@@ -45,9 +44,7 @@ export default function DashboardPage() {
             </div>
 
             <div className="flex-1 md:max-w-40">
-              <label className="block text-sm font-medium mb-1">
-                Data Final
-              </label>
+              <Label>Data Final</Label>
               <Input
                 type="date"
                 className="bg-gray-50"
@@ -72,7 +69,7 @@ export default function DashboardPage() {
               onClick={() => {
                 setRefresh(!refresh);
               }}
-              className="flex-1 md:flex-[0] bg-blue-600 hover:bg-blue-700 cursor-pointer"
+              className="flex-1 md:flex-[0] dark:text-gray-50 bg-blue-600 hover:bg-blue-700 cursor-pointer"
             >
               Filtrar
             </Button>

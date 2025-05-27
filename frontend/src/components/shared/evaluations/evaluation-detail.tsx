@@ -16,6 +16,8 @@ import { format } from "date-fns";
 import type { Paginated } from "@/shared/dto/paginated.dto";
 import { Button } from "@/components/ui/button";
 import type { EvaluationProps } from "@/shared/dto/evaluation-props.dto";
+import { Utils } from "@/shared/utils";
+import toast from "react-hot-toast";
 
 interface Props extends EvaluationProps {}
 
@@ -45,8 +47,13 @@ export function EvaluationDetails({ filter }: Props) {
       });
       setEvaluations(res.data.data);
       setMeta(res.data.meta);
-    } catch (error) {
-      console.error(error);
+    } catch (error: any) {
+      let errorApi = Utils.getErrorApi(
+        error,
+        "Ocorreu um erro ao buscar a Detalhamentos das Avaliações."
+      );
+      if (errorApi.toString().includes("Erro de conexão")) return;
+      toast.error(errorApi);
     } finally {
       setLoading(false);
     }
@@ -59,7 +66,7 @@ export function EvaluationDetails({ filter }: Props) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Detalhamento das Avaliações</CardTitle>
+        <CardTitle>Detalhamentos das Avaliações</CardTitle>
       </CardHeader>
       <CardContent className="p-0 px-4">
         <Table>

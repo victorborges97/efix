@@ -13,7 +13,10 @@ import { api } from "@/lib/api";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useRef } from "react";
+import { useRef, useState } from "react";
+import { Utils } from "@/shared/utils";
+import toast from "react-hot-toast";
+import { ButtonSubmit } from "../submit-save";
 
 const schema = z.object({
   errorCode: z
@@ -35,28 +38,37 @@ export function SuggestionDialog({ onSuccess }: { onSuccess: () => void }) {
     resolver: zodResolver(schema),
   });
 
+  const [loading, setLoading] = useState(false);
+
   const closeRef = useRef<HTMLButtonElement | null>(null);
 
   const onSubmit = async (data: FormValues) => {
     try {
-      console.log(data);
+      setLoading(true);
       await api.post("/suggestions", data);
       reset();
       onSuccess();
+      toast.success("Sugestão salva com sucesso!");
       closeRef.current?.click();
     } catch (error: any) {
-      if (error?.response?.data) {
-        console.error(error.response.data);
-      } else {
-        console.error(error);
-      }
+      let errorApi = Utils.getErrorApi(
+        error,
+        "Não foi possível cadastrar a nova sugestão. Tente novamente mais tarde."
+      );
+      toast.error(errorApi);
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <Dialog>
+    <Dialog
+      onOpenChange={(isOpen) => {
+        if (!isOpen) reset();
+      }}
+    >
       <DialogTrigger asChild>
-        <Button className="flex-1 md:flex-[0] bg-emerald-600 hover:bg-emerald-700 cursor-pointer">
+        <Button className="flex-1 md:flex-[0] dark:text-gray-50 bg-emerald-600 hover:bg-emerald-700 cursor-pointer">
           Nova
         </Button>
       </DialogTrigger>
@@ -64,25 +76,38 @@ export function SuggestionDialog({ onSuccess }: { onSuccess: () => void }) {
         <DialogHeader>
           <DialogTitle>Nova sugestão</DialogTitle>
         </DialogHeader>
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-          <div>
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="grid grid-cols-1 gap-2 sm:grid-cols-4"
+        >
+          <div className="col-span-1">
             <Label htmlFor="errorCode">Código do erro</Label>
-            <Input id="errorCode" {...register("errorCode")} />
+            <Input
+              id="errorCode"
+              maxLength={6}
+              disabled={loading}
+              {...register("errorCode")}
+            />
             {errors.errorCode && (
               <p className="text-sm text-red-500">{errors.errorCode.message}</p>
             )}
           </div>
-          <div>
+
+          <div className="col-span-1 md:col-span-3">
             <Label htmlFor="text">Sugestão</Label>
-            <Input id="text" {...register("text")} />
+            <Input disabled={loading} id="text" {...register("text")} />
             {errors.text && (
               <p className="text-sm text-red-500">{errors.text.message}</p>
             )}
           </div>
-          <DialogClose asChild>
-            <button type="button" ref={closeRef} className="hidden" />
-          </DialogClose>
-          <Button type="submit">Salvar</Button>
+
+          <div className="col-span-1 sm:col-span-4">
+            <DialogClose asChild>
+              <button type="button" ref={closeRef} className="hidden" />
+            </DialogClose>
+
+            <ButtonSubmit isSubmitting={loading} />
+          </div>
         </form>
       </DialogContent>
     </Dialog>

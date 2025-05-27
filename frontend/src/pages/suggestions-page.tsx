@@ -15,6 +15,9 @@ import { api } from "@/lib/api";
 import type { Paginated } from "@/shared/dto/paginated.dto";
 import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Utils } from "@/shared/utils";
+import toast from "react-hot-toast";
+import { Label } from "@/components/ui/label";
 
 type SuggestionDTO = {
   id: number;
@@ -51,8 +54,12 @@ export default function SuggestionsPage() {
       });
       setData(res.data.data);
       setMeta(res.data.meta);
-    } catch (err) {
-      console.error(err);
+    } catch (error: any) {
+      let errorApi = Utils.getErrorApi(
+        error,
+        "Ocorreu um erro ao buscar a Sugestões."
+      );
+      toast.error(errorApi);
     } finally {
       setLoading(false);
     }
@@ -69,9 +76,7 @@ export default function SuggestionsPage() {
 
         <div className="flex flex-col md:flex-row mt-4 md:mt-0 md:justify-end md:items-end gap-4">
           <div className="flex-1 md:max-w-40">
-            <label className="block text-sm font-medium mb-1">
-              Código de Error
-            </label>
+            <Label>Código de Error</Label>
             <Input
               placeholder="Filtrar por código de erro"
               value={errorCode}
@@ -92,7 +97,7 @@ export default function SuggestionsPage() {
               onClick={() => {
                 setRefresh(!refresh);
               }}
-              className="flex-1 md:flex-[0] bg-blue-600 hover:bg-blue-700 cursor-pointer"
+              className="flex-1 md:flex-[0] dark:text-gray-50 bg-blue-600 hover:bg-blue-700 cursor-pointer"
             >
               Filtrar
             </Button>
