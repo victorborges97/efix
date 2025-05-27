@@ -1,20 +1,23 @@
-import { io } from "socket.io-client";
 import { useEffect } from "react";
-
-const socket = io(import.meta.env.VITE_API_URL);
+import { useSocketContext } from "@/lib/socket.io";
 
 const events = ['evaluation:created', 'suggestion:created'] as const;
 export type EventType = typeof events[number];
 
 export function useSocket<T>(event: EventType, onUpdate: (data: T) => void) {
+    const socket = useSocketContext();
+
     useEffect(() => {
-        socket.on(event, (data: any) => {
+        const handler = (data: any) => {
             onUpdate(data);
-        });
+        };
+
+        socket.on(event, handler);
 
         return () => {
-            socket.off(event);
+            socket.off(event, handler); // remove só esse listener
         };
-    }, []);
+    }, [event, onUpdate, socket]);
+
     return socket;
 }

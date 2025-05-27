@@ -13,9 +13,10 @@ import { useSocket } from "@/shared/hooks/use-socket";
 import type { Evaluation } from "@/shared/interfaces/evaluation";
 
 export default function DashboardPage() {
-  useSocket<Evaluation>("evaluation:created", (_) => {
+  const _ = useSocket<Evaluation>("evaluation:created", (_) => {
     setRefresh(!refresh);
   });
+
   const [refresh, setRefresh] = useState(false);
 
   const [dateRange, setDateRange] = useState<DateRange>({
