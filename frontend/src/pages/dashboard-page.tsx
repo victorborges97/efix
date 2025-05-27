@@ -9,8 +9,13 @@ import { EvaluationPerSuggestion } from "@/components/shared/evaluations/evaluat
 import { EvaluationAverage } from "@/components/shared/evaluations/evaluation-average";
 import { TitlePage } from "@/components/shared/title-page";
 import { Label } from "@/components/ui/label";
+import { useSocket } from "@/shared/hooks/use-socket";
+import type { Evaluation } from "@/shared/interfaces/evaluation";
 
 export default function DashboardPage() {
+  useSocket<Evaluation>("evaluation:created", (_) => {
+    setRefresh(!refresh);
+  });
   const [refresh, setRefresh] = useState(false);
 
   const [dateRange, setDateRange] = useState<DateRange>({

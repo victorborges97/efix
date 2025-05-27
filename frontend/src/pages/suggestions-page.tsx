@@ -18,6 +18,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Utils } from "@/shared/utils";
 import toast from "react-hot-toast";
 import { Label } from "@/components/ui/label";
+import { useSocket } from "@/shared/hooks/use-socket";
 
 type SuggestionDTO = {
   id: number;
@@ -28,6 +29,11 @@ type SuggestionDTO = {
 };
 
 export default function SuggestionsPage() {
+  useSocket<any>("suggestion:created", (_) => {
+    setPage(1);
+    fetchData(false);
+  });
+
   const [errorCode, setErrorCode] = useState("");
   const [refresh, setRefresh] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -42,12 +48,12 @@ export default function SuggestionsPage() {
     totalPages: 1,
   });
 
-  const fetchData = async () => {
+  const fetchData = async (hasLoading = true) => {
     const params: any = { page, perPage };
     if (errorCode.length === 6) params.errorCode = errorCode;
 
     try {
-      setLoading(true);
+      if (hasLoading) setLoading(true);
       // const res = await api.get<SuggestionDTO[]>("/suggestions", {
       const res = await api.get<Paginated<SuggestionDTO>>("/suggestions", {
         params,
@@ -61,7 +67,7 @@ export default function SuggestionsPage() {
       );
       toast.error(errorApi);
     } finally {
-      setLoading(false);
+      if (hasLoading) setLoading(false);
     }
   };
 

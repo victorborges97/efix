@@ -16,12 +16,17 @@ import { Button } from "@/components/ui/button";
 import type { EvaluationPerSuggestion } from "@/shared/interfaces/evaluation-per-suggestion";
 import { Utils } from "@/shared/utils";
 import toast from "react-hot-toast";
+import { useSocket } from "@/shared/hooks/use-socket";
 
 export function EvaluationPerSuggestion({
   filter,
 }: {
   filter?: { startDate?: string; endDate?: string };
 }) {
+  useSocket<any>("suggestion:created", (_) => {
+    fetchData(false);
+  });
+
   const [page, setPage] = useState(1);
   const perPage = 10;
 
@@ -30,9 +35,9 @@ export function EvaluationPerSuggestion({
 
   const [loading, setLoading] = useState(true);
 
-  const fetchData = async () => {
+  const fetchData = async (hasLoading = true) => {
     try {
-      setLoading(true);
+      if (hasLoading) setLoading(true);
       setMeta(defaultMeta);
 
       const params: any = {
@@ -58,7 +63,7 @@ export function EvaluationPerSuggestion({
       if (errorApi.toString().includes("Erro de conexão")) return;
       toast.error(errorApi);
     } finally {
-      setLoading(false);
+      if (hasLoading) setLoading(false);
     }
   };
 
