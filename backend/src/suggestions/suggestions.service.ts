@@ -38,6 +38,9 @@ export class SuggestionsService {
       skip,
       where,
       take,
+      orderBy: {
+        createdAt: 'desc',
+      }
     });
     const totalCount = await this.prisma.suggestion.count({
       where,

@@ -51,6 +51,9 @@ export class DashboardService {
           select: { evaluation: true }
         },
       },
+      orderBy: {
+        createdAt: 'desc',
+      }
     });
 
     const averages = result.map(s => {
