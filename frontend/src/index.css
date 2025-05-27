@@ -6,6 +6,12 @@
 body {
   font-family: "Roboto", sans-serif;
   font-size: 95%;
+
+  @apply bg-background text-foreground;
+}
+
+.font-logo {
+  font-family: "Poppins", sans-serif;
 }
 
 @theme inline {
