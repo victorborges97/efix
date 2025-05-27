@@ -6,10 +6,11 @@ import { QueryPaginationDto, usePagination } from 'src/shared/dto/query-paginati
 import { Paginated, useMetaPaginated } from 'src/shared/types/paginated.type';
 import { EvaluationResponse } from 'src/shared/interfaces/evaluation.response';
 import { useEvaluationFilter } from 'src/shared/hooks/use-filters';
+import { EventsGateway } from 'src/events/events.gateway';
 
 @Injectable()
 export class EvaluationsService {
-  constructor(private prisma: PrismaService) { }
+  constructor(private prisma: PrismaService, private eventsService: EventsGateway) { }
 
   async create(data: CreateEvaluationDto): Promise<EvaluationResponse> {
     const errorCode = await this.prisma.suggestion.findUnique({
@@ -20,7 +21,7 @@ export class EvaluationsService {
 
     if (!errorCode) throw new NotFoundException("Suggestion not found!")
 
-    return this.prisma.evaluation.create({
+    const created = await this.prisma.evaluation.create({
       data: {
         clientCode: data.clientCode,
         evaluation: data.evaluation,
@@ -29,6 +30,10 @@ export class EvaluationsService {
         suggestionId: errorCode.id,
       }
     });
+
+    this.eventsService.notify("evaluation:created", created);
+
+    return created;
   }
 
   async getAll(params: FilterEvaluationsDto, pagination?: QueryPaginationDto) {
