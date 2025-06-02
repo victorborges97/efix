@@ -10,27 +10,8 @@ API REST criada com NestJS e PostgreSQL para gerenciamento de sugestões de solu
 - [Prisma ORM](https://www.prisma.io/)
 - [Docker](https://www.docker.com/)
 
-## 📖 Estrutura do projeto
-
-```bash
-src/
-├── app.module.ts
-├── main.ts
-├── suggestions/
-│   ├── suggestions.module.ts
-│   ├── suggestions.controller.ts
-│   ├── suggestions.service.ts
-│   ├── dto/
-├── evaluations/
-│   ├── evaluations.module.ts
-│   ├── evaluations.controller.ts
-│   ├── evaluations.service.ts
-│   ├── dto/
-└── prisma/
-    ├── prisma.module.ts
-    ├── prisma.service.ts
-```
-
+---
+ 
 ## 📁 Como rodar localmente
 
 ### Requisitos:
@@ -63,6 +44,8 @@ npm run start:dev
 A API ficará disponível em `http://localhost:3000`
 O Swagger ficará disponível em `http://localhost:3000/api`
 
+---
+ 
 ## 📂 Variáveis de ambiente
 
 Crie um arquivo `.env` com base no `.env.example`:
@@ -71,10 +54,14 @@ Crie um arquivo `.env` com base no `.env.example`:
 DATABASE_URL="postgresql://postgres:postgres@localhost:5432/efix-alterdata"
 ```
 
+---
+ 
 ## 🔗 Frontend
 
 Repositório: [frontend](https://github.com/victorborges97/efix)
 
+---
+ 
 ## 👥 Contato
 
 Repositório mantido por **Victor Borges** para o processo seletivo.

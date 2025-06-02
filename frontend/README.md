@@ -12,25 +12,7 @@ Interface Web desenvolvida em React para o sistema eFix, responsável por gerenc
 * [React Router](https://reactrouter.com/)
 * [React Hook Form](https://react-hook-form.com/)
 
-## 📖 Estrutura do projeto
-
-```
-src/
-├── assets/
-├── components/
-│   ├── Header.tsx
-│   └── ...
-├── pages/
-│   ├── Dashboard.tsx
-│   ├── SuggestionForm.tsx
-│   └── EvaluationForm.tsx
-├── services/
-│   └── api.ts
-├── types/
-├── hooks/
-├── App.tsx
-└── main.tsx
-```
+---
 
 ## 📁 Como rodar localmente
 
@@ -55,6 +37,8 @@ npm run dev
 
 A aplicação estará disponível em `http://localhost:5173` (ou porta configurada pelo Vite)
 
+---
+ 
 ## 📂 Variáveis de ambiente
 
 Crie um arquivo `.env` com base no `.env.example`:
@@ -63,23 +47,14 @@ Crie um arquivo `.env` com base no `.env.example`:
 VITE_API_URL=http://localhost:3000
 ```
 
-## ✍️ Convenção de commits
-
-Este projeto segue o padrão [Conventional Commits](https://www.conventionalcommits.org/):
-
-| Tipo     | Descrição                             |
-| -------- | ------------------------------------- |
-| feat     | Nova funcionalidade                   |
-| fix      | Correção de bug                       |
-| chore    | Mudanças de infraestrutura ou config  |
-| docs     | Documentação                          |
-| test     | Adição ou ajuste de testes            |
-| refactor | Refatoramento sem mudar comportamento |
-
+---
+ 
 ## 🔗 Backend
 
 Repositório: [efix-api](https://github.com/victorborges97/efix)
 
+---
+ 
 ## 👥 Contato
 
 Repositório mantido para o processo seletivo. Compartilhado com a usuária **PatriciaSendon** no GitHub.
