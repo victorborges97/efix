@@ -91,6 +91,7 @@ export default function SuggestionsPage() {
               className="max-w-xl bg-white"
               onKeyDown={(key) => {
                 if (["enter", "Enter"].includes(key.code)) {
+                  setPage(1);
                   setRefresh(!refresh);
                   (key.target as HTMLElement).blur(); // remove o foco do input
                 }
@@ -101,6 +102,7 @@ export default function SuggestionsPage() {
           <div className="flex items-center gap-2">
             <Button
               onClick={() => {
+                setPage(1);
                 setRefresh(!refresh);
               }}
               className="flex-1 md:flex-[0] dark:text-gray-50 bg-blue-600 hover:bg-blue-700 cursor-pointer"
