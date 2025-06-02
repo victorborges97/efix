@@ -129,7 +129,7 @@ export function EvaluationDetails({ filter }: Props) {
 
         <div className="flex w-full justify-between items-center">
           <span className="text-xs text-muted-foreground flex-1">
-            Página {meta.page} de {meta.totalPages}
+            Página {meta.page}-{meta.totalPages} de {meta.total} itens
           </span>
           <div className="space-x-2">
             <Button
