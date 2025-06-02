@@ -48,59 +48,10 @@ Este projeto foi desenvolvido para um processo seletivo técnico e é composto p
 
 ---
 
-## 📦 Estrutura de Pastas
-
-### Backend
-
-```
-backend/
-├── src/
-│   ├── app.module.ts
-│   ├── main.ts
-│   ├── suggestions/
-│   │   ├── suggestions.module.ts
-│   │   ├── suggestions.controller.ts
-│   │   ├── suggestions.service.ts
-│   │   └── dto/
-│   ├── evaluations/
-│   │   ├── evaluations.module.ts
-│   │   ├── evaluations.controller.ts
-│   │   ├── evaluations.service.ts
-│   │   └── dto/
-│   └── prisma/
-│       ├── prisma.module.ts
-│       └── prisma.service.ts
-├── prisma/
-│   └── schema.prisma
-└── .env
-```
-
-### Frontend
-
-```
-frontend/
-├── src/
-│   ├── pages/
-│   │   ├── dashboard-page.tsx
-│   │   └── suggestions-page.tsx
-│   ├── components/
-│   │   ├── ui/
-│   │   ├── layout/
-│   │   └── shared/
-│   ├── lib/
-│   │   ├── api.ts
-│   │   └── utils.ts
-├── tailwind.config.ts
-├── shadcn.config.ts
-└── .env
-```
-
----
-
 ## 🧪 Como rodar localmente
 
 ### Requisitos
-- [Node.js](https://nodejs.org/)
+- [Node.js](https://nodejs.org/) 20
 - [Docker](https://www.docker.com/)
 - [PNPM](https://pnpm.io/) ou `npm`/`yarn`
 
@@ -118,13 +69,16 @@ cp .env.example .env
 # Suba o banco de dados
 docker-compose up -d
 
-# Instale as dependências
+# Instalar dependências
 npm install
 
-# Gere as migrations e o client Prisma
-npx prisma migrate dev --name init
+# Rodar as migrations para criar a estrutura do banco
+npx prisma migrate deploy
 
-# Rode a API
+# Gerar client Prisma
+npx prisma generate
+
+# Rodar a aplicação
 npm run start:dev
 ```
 
@@ -158,7 +112,7 @@ npm run dev
 ### Backend `.env`
 
 ```env
-DATABASE_URL="postgresql://postgres:postgres@localhost:5432/efix"
+DATABASE_URL="postgresql://postgres:postgres@localhost:5432/efix-alterdata"
 ```
 
 ### Frontend `.env`
@@ -171,7 +125,5 @@ VITE_API_URL=http://localhost:3000
 
 ## 📫 Contato
 
-Repositório mantido por **Victor Borges** para o processo seletivo.  
-Compartilhado com a usuária **PatriciaSendon** no GitHub.
+Repositório mantido por **Victor Borges** para o processo seletivo.
 
----

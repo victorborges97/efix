@@ -71,23 +71,10 @@ Crie um arquivo `.env` com base no `.env.example`:
 DATABASE_URL="postgresql://postgres:postgres@localhost:5432/efix-alterdata"
 ```
 
-## ✍️ Convenção de commits
-
-Este projeto segue o padrão [Conventional Commits](https://www.conventionalcommits.org/):
-
-| Tipo     | Descrição                             |
-| -------- | ------------------------------------- |
-| feat     | Nova funcionalidade                   |
-| fix      | Correção de bug                       |
-| chore    | Mudanças de infraestrutura ou config  |
-| docs     | Documentação                          |
-| test     | Adição ou ajuste de testes            |
-| refactor | Refatoramento sem mudar comportamento |
-
 ## 🔗 Frontend
 
 Repositório: [frontend](https://github.com/victorborges97/efix)
 
 ## 👥 Contato
 
-Repositório mantido para o processo seletivo. Compartilhado com a usuária **PatriciaSendon** no GitHub.
+Repositório mantido por **Victor Borges** para o processo seletivo.
