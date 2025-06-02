@@ -44,6 +44,9 @@ export class EvaluationsService {
       skip,
       where,
       take,
+      orderBy: {
+        createdAt: 'desc',
+      }
     });
 
     const totalCount = await this.prisma.evaluation.count({
